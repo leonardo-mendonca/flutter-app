@@ -51,10 +51,11 @@ class _NoToDoScreenState extends State<NoToDoScreen> {
                       child: new ListTile(
                         title: _itemList[index],
                         onLongPress: () => _updateItem(_itemList[index], index),
-                        trailing: new Listener(
+                        trailing:
+                        new Listener(
                           key: new Key(_itemList[index].itemName),
                           child: new Icon(Icons.remove_circle, color: Colors.redAccent,),
-                          onPointerDown: (pointerEvent) => _deleteNoDo(_itemList[index].id, index),
+                          onPointerDown: (pointerEvent) => _deleteNoDo(_itemList[index].id, index)
                         ),
                       ),
                     );
@@ -123,11 +124,35 @@ class _NoToDoScreenState extends State<NoToDoScreen> {
   }
 
   _deleteNoDo(int id, int index) async {
-    debugPrint("Deleted Item!");
-    await db.deleteItem(id);
-    setState(() {
-      _itemList.removeAt(index);
-    });
+    var alert = new AlertDialog(
+      title: new Text("Excluir"),
+      content: new Row(
+        children: <Widget>[
+          new Expanded(
+              child: new Text("Confirma a exclusão?"))
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+            onPressed: () async {
+              debugPrint("Deleted Item!");
+              await db.deleteItem(id);
+              setState(() {
+                _itemList.removeAt(index);
+              });
+              Navigator.pop(context);
+            },
+            child: new Text("Sim")),
+        new FlatButton(
+            onPressed: () => Navigator.pop(context),
+            child: new Text("Não"))
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (_) {
+          return alert;
+        });
   }
 
   _updateItem(NoDoItem item, int index) {
