@@ -78,6 +78,7 @@ class _NoToDoScreenState extends State<NoToDoScreen> {
   }
 
   void _showFormDialog() {
+    _textEditingController.text = "";
     var alert = new AlertDialog(
       content: new Row(
         children: <Widget>[
@@ -156,6 +157,7 @@ class _NoToDoScreenState extends State<NoToDoScreen> {
   }
 
   _updateItem(NoDoItem item, int index) {
+    _textEditingController.text = item.itemName;
     var alert = new AlertDialog(
       title: new Text("Update Item"),
       content: new Row(
@@ -166,8 +168,7 @@ class _NoToDoScreenState extends State<NoToDoScreen> {
                 autofocus: true,
                 decoration: new InputDecoration(
                   labelText: "Item",
-                  hintText: "eg. Dont't buy stuff",
-                  icon: new Icon(Icons.update)
+                  icon: new Icon(Icons.update),
                 ),
               ))
         ],
@@ -184,6 +185,7 @@ class _NoToDoScreenState extends State<NoToDoScreen> {
               await db.updateItem(newItemUpdated);
               setState(() {
                 _readNoDoList();
+                _textEditingController.text = "";
               });
               Navigator.pop(context);
             },
